@@ -1,0 +1,3 @@
+[submodule "Corpus statistics/finngen-tools"]
+	path = Corpus statistics/finngen-tools
+	url = https://github.com/TurkuNLP/finngen-tools.git
