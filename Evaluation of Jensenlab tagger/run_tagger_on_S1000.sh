@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #Copy text from C2 other dir
-# get the S1000 corpus from here: https://jensenlab.org/resources/s1000/
+
 tar -xzvf S1000-corpus.tar.gz
 mkdir S1000-jensenlab-tagger/entire-corpus/test
 

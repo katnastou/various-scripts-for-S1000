@@ -1,16 +1,16 @@
 #!/bin/sh
 # Do the counts for corpus statistics
 
-arr=( "bac" "bot" "ent" "med" "myc" "pro" "vir" "zoo" )
-
-#get the corpus from here: https://jensenlab.org/resources/s1000/
+## get the corpus from here: https://jensenlab.org/resources/s1000/
+wget https://jensenlab.org/assets/s1000/S1000-corpus.tar.gz
+tar -xzcf S1000-corpus.tar.gz
 cd S1000-corpus-split
 
 ### Calculate total mentions
 
 #### Calculate for the entire corpus
 
-### Get all mentions from the anns
+##### Get all mentions from the anns
 #on linux
 for i in entire-corpus/{train,dev,test}/*.ann; do
    grep -P "^T\d+\tSpecies" ${i}  | perl -pe 's/^T\d+\t\w+\s\d+\s\d+\t(.*)$/$1/' >> all_mentions_species.list
@@ -29,6 +29,7 @@ cat all_mentions_species.list all_mentions_genus.list all_mentions_strain.list >
 wc -l all_mentions* > counts_all.txt
 
 #### Calculate per category
+arr=( "bac" "bot" "ent" "med" "myc" "pro" "vir" "zoo" )
 #on linux
 for j in "${arr[@]}"; do    
     for i in per-journal-category/${j}/{train,dev,test}/*.ann; do

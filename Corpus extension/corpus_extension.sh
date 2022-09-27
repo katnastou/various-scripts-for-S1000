@@ -21,7 +21,7 @@ paste id_parent_type.dmp scientific_names.tsv > id_parent_type_with_name.tsv
 #Process for filtering out “known” species/genera, to get the unique taxids and their corresponding NCBI 
 #Taxonomy scientific names from the current iteration of the annotation
 
-wget 'http://ann.turkunlp.org:8088/ajax.cgi?action=downloadCollection&collection=%2FS800%2F&include_conf=1&protocol=1' -O S800.tar.gz
+wget https://jensenlab.org/assets/s1000/S800-reannotated.tar.gz
 tar xvzf S800.tar.gz
 cat S800/*.ann | egrep '^N' | cut -f 2 | perl -pe 's/^Reference T\d+ Taxonomy:// or die' | sort -n | uniq > unique-taxids.txt
 
@@ -78,9 +78,19 @@ perl get_unique_elements_last_column.pl
 
 mkdir -p no-organism-mention-docs
 cd no-organism-mention-docs
-#get tagger results with organisms dictionary -- see Large scale tagging for more details and scripts to run tagger
-cut -f 1,7 ../all_matches.tsv | egrep $'\t''-2$' | cut -f 1 | uniq > organism-mention-pmids.txt
-cut -f 1 ../database_documents.tsv > all-pmids.txt
+
+#get tagger results with organisms dictionary
+#I need to set up tagger first https://github.com/larsjuhljensen/tagger
+#the dictionary files and the corpus can be downloaded from https://jensenlab.org/resources/S1000
+# wget 
+# wget 
+# tar -xzvf 
+# tar -xzvf 
+
+gzip -cd `ls -1 data/databases/pmc/*.en.merged.filtered.tsv.gz` `ls -1r data/databases/pubmed/*.tsv.gz` | cat data/textmining/excluded_documents.txt - | tagcorpus --threads=40 --types=../organisms_types.tsv --entities=../organisms_entities_filtered_cellular.tsv --names=../organisms_names_filtered_cellular.tsv --groups=../organisms_groups_filtered_cellular.tsv --stopwords=../all_global.tsv --local-stopwords=../all_local.tsv --out-matches=all_matches.tsv --out-segments=all_segments.tsv 
+
+cut -f 1,7 all_matches.tsv | egrep $'\t''-2$' | cut -f 1 | uniq > organism-mention-pmids.txt
+cut -f 1 database_documents.tsv > all-pmids.txt
 split -l 1000000 all-pmids.txt all-pmids-
 for f in all-pmids-*; do echo $f; sort $f > sorted-$f; done
 sort -m sorted-all-pmids-* > sorted-all-pmids.txt
@@ -90,15 +100,5 @@ for f in organism-mention-pmids-*; do echo $f; sort $f > sorted-$f; done
 sort -m sorted-organism-mention-pmids-* > sorted-organism-mention-pmids.txt
 rm organism-mention-pmids-* sorted-organism-mention-pmids-*
 comm -2 -3 sorted-all-pmids.txt sorted-organism-mention-pmids.txt > no-organism-mention-pmids.txt
-wc -l all-pmids.txt organism-mention-pmids.txt no-organism-mention-pmids.txt 
-#  31257225 all-pmids.txt
-#  10936532 organism-mention-pmids.txt
-#  20320693 no-organism-mention-pmids.txt
-
-    # i.e. 2/3 have no organism mentions detected by the tagger(!)
 
 shuf -n 25 no-organism-mention-pmids > ./negative-selected.tsv
-
-perl -pe '$_ = "" unless(rand()<0.001)' no-organism-mention-pmids.txt > no-organism-mention-pmid-sample.txt
-wc -l no-organism-mention-pmid-sample.txt
-# 20406 no-organism-mention-pmid-sample.txt
