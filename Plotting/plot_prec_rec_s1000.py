@@ -78,8 +78,8 @@ def plot_data(options):
     
 
 if __name__ == "__main__":
-    '''Example call: python3 plot_prec_rec_s1000.py --ml_method_file=Jouni-species-test-S1000-pr-rec-f1.tsv --jensenlab_method_file=Jensenlab-species-test-S1000-pr-rec-f1.tsv --task="Precision-Recall Plot for S1000" --output_file=S1000_plot.pdf'''
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument('-h','--help', action="help", help='Example call: python3 plot_prec_rec_s1000.py --ml_method_file=Jouni-species-test-S1000-pr-rec-f1.tsv --jensenlab_method_file=Jensenlab-species-test-S1000-pr-rec-f1.tsv --task="Precision-Recall Plot for S1000" --output_file=S1000_plot.pdf')
     parser.add_argument("--ml_method_file", required=True, type=str)
     parser.add_argument("--jensenlab_method_file", required=True, type=str)
     parser.add_argument("--task", required=True, type=str)

@@ -125,8 +125,8 @@ def plot_data(options):
     
 
 if __name__ == "__main__":
-    '''Example call: python3 plot_prec_rec_progression.py --input_file=progression_precision_recall.tsv --task="Precision-Recall Plot for Progression" --output_file=progression_plot.pdf'''
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument('-h','--help', action="help", help='Example call: python3 plot_prec_rec_progression.py --input_file=progression_precision_recall.tsv --task="Precision-Recall Plot for Progression" --output_file=progression_plot.pdf')
     parser.add_argument("--input_file", required=True, type=str)
     parser.add_argument("--task", required=True, type=str)
     parser.add_argument("--output_file", required=True, type=str)
