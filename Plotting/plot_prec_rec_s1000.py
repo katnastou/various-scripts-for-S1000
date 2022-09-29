@@ -32,7 +32,7 @@ def plot_data(options):
     num_categories = 7
     c = [tab10(float(i)/num_categories) for i in range(num_categories)]
     #make font size larger
-    sns.set(font_scale=1.2)
+    sns.set(font_scale=1.4)
     sns.set_style("whitegrid")
     sns.color_palette(c, 7)
 
@@ -42,14 +42,14 @@ def plot_data(options):
         hue="Category", 
         palette=c, 
         linewidth=0.1,
-        s=100,
+        s=200,
     ).set(title=options.task)
     
-    g.figure.set_size_inches(12,9)
+    g.figure.set_size_inches(12,8)
     g.ax.margins(.15)
-    g.ax.xaxis.grid(True, "major", linewidth=.25)
+    g.ax.xaxis.grid(True, "major", linewidth=0.5)
     # g.ax.xaxis.grid(True, "minor", linewidth=.05)
-    g.ax.yaxis.grid(True, "major", linewidth=.25)
+    g.ax.yaxis.grid(True, "major", linewidth=0.5)
 
     plt.yticks([60,65,70,75,80,85,90,95,100],[60,65,70,75,80,85,90,95,100])
     plt.xticks([60,65,70,75,80,85,90,95,100],[60,65,70,75,80,85,90,95,100])
@@ -57,22 +57,27 @@ def plot_data(options):
     g.ax.set_xlim([58, 102])
 
     g.ax.set(xlabel='Precision (%)', ylabel='Recall (%)')
-
+    #remove the legend 
+    g._legend.remove()
     #plot points from file to see what has been checked.
     df = load_data(options.ml_method_file)
 
-    plt.scatter(df.prec, df.rec, s=100,  marker='^', c=c)
+    plt.scatter(df.prec, df.rec, s=200,  marker='^', c=c)
 
-    legend_elements = [ Line2D([0], [0], marker='o', color='white', label='Jensenlab tagger',
-                            markerfacecolor='black', markersize=10),
-                    Line2D([0], [0], marker='^', color='white', label='ML-based method',
-                            markerfacecolor='black', markersize=10)
-                    ]
+    #add the legend for the two categories
+    # legend_elements = [ Line2D([0], [0], marker='o', color='white', label='Jensenlab tagger',
+    #                         markerfacecolor='black', markersize=10),
+    #                 Line2D([0], [0], marker='^', color='white', label='ML-based method',
+    #                         markerfacecolor='black', markersize=10)
+    #                 ]
+    # plt.legend(handles=legend_elements, loc='center', bbox_to_anchor=(1.1, 0.2), frameon=False)
+    
     #plot the contours
     x_c,y_c=make_lists_for_contours()
-    plt.scatter(x_c, y_c, s=1,  marker='o', c='grey')
+    plt.scatter(x_c, y_c, s=3,  marker='o', c='lightgrey')
+    
+    
     # Create the figure
-    plt.legend(handles=legend_elements, loc='center', bbox_to_anchor=(1.1, 0.2), frameon=False)
     plt.savefig(options.output_file) 
     plt.show()
     

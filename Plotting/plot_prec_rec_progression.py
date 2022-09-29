@@ -33,7 +33,7 @@ def plot_data(options):
     c = [Dark2(float(i)/num_categories) for i in range(num_categories)]
 
     #make font size larger
-    sns.set(font_scale=1.2)
+    sns.set(font_scale=1.8)
     sns.set_style("whitegrid")
     sns.color_palette(c, num_categories)
     df = load_data(options.input_file)
@@ -51,7 +51,7 @@ def plot_data(options):
         kind="line"
     ).set(title=options.task)
     
-    g.figure.set_size_inches(12,9)
+    g.figure.set_size_inches(14,12)
     g.ax.margins(.15)
     g.ax.xaxis.grid(True, "major", linewidth=.25)
     # g.ax.xaxis.grid(True, "minor", linewidth=.05)
@@ -67,7 +67,7 @@ def plot_data(options):
 
     # #plot points from file to see what has been checked.
     
-    sns.scatterplot(data=df,x='Precision',y='Recall',palette=c,hue="Step",s=100)
+    sns.scatterplot(data=df,x='Precision',y='Recall',palette=c,hue="Revision Step",s=100)
     # for i in range(df.shape[0]-2):
     #     plt.text(x=df.Precision[i]-1.4,y=df.Recall[i]-1.4,s=df.Step[i], 
     #             fontdict=dict(color='black',size=10),
@@ -90,23 +90,25 @@ def plot_data(options):
 #     plt.text(x=df.Precision[5]-1,y=df.Recall[5]-1.4,s=str(df.Step[5])+" ("+str(df.Precision[5])+"%, "+str(df.Recall[5])+"%)", 
 #             fontdict=dict(color='black',size=10),
 #             bbox=dict(facecolor=c[5],alpha=0.5))
-    plt.text(x=df.Precision[0]-1.4,y=df.Recall[0]-1.4,s=str(df.Step[0])+" ("+str(df.F[0])+"%)", 
-            fontdict=dict(color='black',size=10),
+    #replace space in column name to call
+    df.columns = [c.replace(' ', '_') for c in df.columns]
+    plt.text(x=df.Precision[0]-1.0,y=df.Recall[0]-1.7,s=str(df.Revision_Step[0])+" ("+str(df.F[0])+"%)", 
+            fontdict=dict(color='black',size=20),
             bbox=dict(facecolor=c[0],alpha=0.5))
-    plt.text(x=df.Precision[1]-1.4,y=df.Recall[1]-1.4,s=str(df.Step[1])+" ("+str(df.F[1])+"%)", 
-            fontdict=dict(color='black',size=10),
+    plt.text(x=df.Precision[1]-0.4,y=df.Recall[1]-1.7,s=str(df.Revision_Step[1])+" ("+str(df.F[1])+"%)", 
+            fontdict=dict(color='black',size=20),
             bbox=dict(facecolor=c[1],alpha=0.5))
-    plt.text(x=df.Precision[2]-0.2,y=df.Recall[2]-1.4,s=str(df.Step[2])+" ("+str(df.F[2])+"%)", 
-            fontdict=dict(color='black',size=10),
+    plt.text(x=df.Precision[2]-0.2,y=df.Recall[2]-1.7,s=str(df.Revision_Step[2])+" ("+str(df.F[2])+"%)", 
+            fontdict=dict(color='black',size=20),
             bbox=dict(facecolor=c[2],alpha=0.5))
-    plt.text(x=df.Precision[3]-7.3,y=df.Recall[3]+0.5,s=str(df.Step[3])+" ("+str(df.F[3])+"%)", 
-            fontdict=dict(color='black',size=10),
+    plt.text(x=df.Precision[3]-7.3,y=df.Recall[3]+1.0,s=str(df.Revision_Step[3])+" ("+str(df.F[3])+"%)", 
+            fontdict=dict(color='black',size=20),
             bbox=dict(facecolor=c[3],alpha=0.5))
-    plt.text(x=df.Precision[4]+0.5,y=df.Recall[4]+0.5,s=str(df.Step[4])+" ("+str(df.F[4])+"%)", 
-            fontdict=dict(color='black',size=10),
+    plt.text(x=df.Precision[4]+0.5,y=df.Recall[4]+0.8,s=str(df.Revision_Step[4])+" ("+str(df.F[4])+"%)", 
+            fontdict=dict(color='black',size=20),
             bbox=dict(facecolor=c[4],alpha=0.5))
-    plt.text(x=df.Precision[5]-1,y=df.Recall[5]-1.4,s=str(df.Step[5])+" ("+str(df.F[5])+"%)", 
-            fontdict=dict(color='black',size=10),
+    plt.text(x=df.Precision[5]-1,y=df.Recall[5]-1.7,s=str(df.Revision_Step[5])+" ("+str(df.F[5])+"%)", 
+            fontdict=dict(color='black',size=20),
             bbox=dict(facecolor=c[5],alpha=0.5))
     # plt.scatter(df.Precision, df.Recall, s=100,  marker='o', c=c)
 
