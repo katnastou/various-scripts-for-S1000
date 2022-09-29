@@ -1,7 +1,7 @@
-Step	Precision	Recall	F
-S800	69.4	79.6	74.2
-Decoupling	81.3	82.9	82.1
-Boundary consistency	89.5	88.8	89.2
-Strains	94.8	94.9	94.8
-Genera	95.1	95.1	95.1
-Extension (S1000)	93.9	92.8	93.3
+Revision Step	Precision	Recall	F
+S800	70.3	80.1	74.9
+Decoupling	81.2	84.1	82.6
+Boundary consistency	89.4	89.4	89.4
+Strains	94.5	95.9	95.2
+Genera	95.5	94.5	95.0
+S1000	94.1	92.2	93.1
