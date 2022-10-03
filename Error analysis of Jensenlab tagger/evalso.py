@@ -71,6 +71,21 @@ class Span(object):
         return "%s\t%s %s %s\t%s" % (self.id_, self.type_, 
                                      self.start, self.end, self.text)
 
+# replace discontinuous annotations spans with the last subspans on
+# given line. TODO: proper handling of discontinuous annotations
+def resolve_discontinuous(l):
+    m = re.match(r'^(T\S+)\t(\S+) (\d+ \d+(?:;\d+ \d+)+)\t(.*)$', l)
+    if not m:
+        return l
+    id_, type_, offsets, text = m.groups()
+    last_off = offsets.split(';')[-1]
+    last_start, last_end = last_off.split(' ')
+    last_start, last_end = int(last_start), int(last_end)
+    last_text = text[last_start-last_end:]
+    print >> sys.stderr, 'Note: replace discontinuous "%s" with "%s"' % \
+        (text, last_text)
+    return '%s\t%s %d %d\t%s' % (id_, type_, last_start, last_end, last_text)
+
 # parses a standoff-formatted file containing tagged entities.
 # returns a dictionary indexed with entity ids containing 
 # (type, start, end, text) tuples.
@@ -82,6 +97,7 @@ def parse_standoff(fn):
         flags = {}
         for l in f:
             l = l.strip()
+            l = resolve_discontinuous(l)
 
             mt = re.match(r'^(T\S+)\t(\S+) (\d+) (\d+)\t(.*)$', l)
             ma = re.match(r'^([MA]\S+)\t(\S+) (\S+)$', l)
