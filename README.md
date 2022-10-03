@@ -3,7 +3,7 @@
 This repository contains scripts to support different steps of the analyses performed in the S1000 paper. 
 It has been split in 6 different directories for clarity
 
-For various scripts it is necessary to set up Jensenlab tagger before invoking them. The tagger and instructions on how to set it up can be found here: https://github.com/larsjuhljensen/tagger
+For various scripts it is necessary to set up Jensenlab tagger before invoking them. The tagger and instructions on how to set it up can be found [here](https://github.com/larsjuhljensen/tagger)
 
 ## Corpus extension
 
@@ -30,9 +30,7 @@ For word counting of the documents BERT basic tokenization is used, with the imp
 
 This directory contains several scripts and the process is split in two parts. This process recreates the numbers shown for Jensenlab tagger for Figure 2 in the manuscript. 
 
-### Run tagger on S1000
-
-The first step is to run tagger on S1000. In order to make sure the results are comparable the text of `database_documents.tsv ` is replaced with the text in the S1000 corpus before running tagger. Then tagger is run with the updated organisms dictionary downloaded from Zenodo as described in the manuscript. Afterwards, only species mentions are kept and the tagger2standoff script is used to convert the tagger output to BRAT standoff format. Finally, the text is filtered and aligned and the evaluation script is run on the entire corpus. 
+The first step is to run tagger on S1000. In order to make sure the results are comparable the text of `database_documents.tsv` is replaced with the text in the S1000 corpus before running tagger. Then tagger is run with the updated organisms dictionary downloaded from Zenodo as described in the manuscript. Afterwards, only species mentions are kept and the tagger2standoff script is used to convert the tagger output to BRAT standoff format. Finally, the text is filtered and aligned and the evaluation script is run on the entire corpus. 
 
 ```shell
 ./run_tagger_on_S1000.sh
@@ -52,6 +50,28 @@ For the error analysis the evaluation script `evalso.py` is used to detect False
 ./tagger_error_analysis.sh
 ```
 
-## Large scale tagging
+## Large scale tagging for Jensenlab tagger
+
+For the large scale tagging, the [tagger](https://github.com/larsjuhljensen/tagger) needs to be set up first (See above). Then one needs to execute the shell script and the results that are also available in [Zenodo](add_link_here) can be obtained. 
+
+```shell
+./tagger-run.sh
+```
 
 ## Plotting
+
+To generate the plots for Figure 1 and Figure 2 in the manuscript one needs to execute the following commands
+
+For Figure 1:
+
+```shell
+python3 plot_prec_rec_progression.py --input_file=progression_precision_recall.tsv --task="Precision-Recall Plot for Progression" --output_file=progression_plot.pdf
+```
+
+For Figure 2:
+
+```shell
+python3 plot_prec_rec_s1000.py --ml_method_file=Jouni-species-test-S1000-pr-rec-f1.tsv --jensenlab_method_file=Jensenlab-species-test-S1000-pr-rec-f1.tsv --task="Precision-Recall Plot for S1000" --output_file=S1000_plot.pdf
+```
+
+The figures generated from these commands are then further processed in Adobe Illustrator to place the legends properly and do some final polishing. 
