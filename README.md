@@ -28,6 +28,21 @@ For word counting of the documents BERT basic tokenization is used, with the imp
 
 ## Evaluation of Jensenlab tagger
 
+This directory contains several scripts and the process is split in two parts. This process recreates the numbers shown for Jensenlab tagger for Figure 2 in the manuscript. 
+
+### Run tagger on S1000
+
+The first step is to run tagger on S1000. In order to make sure the results are comparable the text of `database_documents.tsv ` is replaced with the text in the S1000 corpus before running tagger. Then tagger is run with the updated organisms dictionary downloaded from Zenodo as described in the manuscript. Afterwards, only species mentions are kept and the tagger2standoff script is used to convert the tagger output to BRAT standoff format. Finally, the text is filtered and aligned and the evaluation script is run on the entire corpus. 
+
+```shell
+./run_tagger_on_S1000.sh
+```
+
+Finally, to generate the numbers for Figure 2, the evaluation script is run for each category.
+
+```shell
+./tagger_eval_per_category.sh
+```
 
 ## Error analysis of Jensenlab tagger
 
