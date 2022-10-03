@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#Copy text from C2 other dir
-
 tar -xzvf S1000-corpus.tar.gz
 mkdir S1000-jensenlab-tagger/entire-corpus/test
 
