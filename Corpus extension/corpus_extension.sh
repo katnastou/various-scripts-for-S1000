@@ -87,7 +87,7 @@ cd no-organism-mention-docs
 # tar -xzvf 
 # tar -xzvf 
 
-gzip -cd `ls -1 data/databases/pmc/*.en.merged.filtered.tsv.gz` `ls -1r data/databases/pubmed/*.tsv.gz` | cat data/textmining/excluded_documents.txt - | tagcorpus --threads=40 --types=../organisms_types.tsv --entities=../organisms_entities_filtered_cellular.tsv --names=../organisms_names_filtered_cellular.tsv --groups=../organisms_groups_filtered_cellular.tsv --stopwords=../all_global.tsv --local-stopwords=../all_local.tsv --out-matches=all_matches.tsv --out-segments=all_segments.tsv 
+gzip -cd `ls -1 data/databases/pmc/*.en.merged.filtered.tsv.gz` `ls -1r data/databases/pubmed/*.tsv.gz` | cat data/textmining/excluded_documents.txt - | ../tagger/tagcorpus --threads=40 --types=../organisms_types.tsv --entities=../organisms_entities_filtered_cellular.tsv --names=../organisms_names_filtered_cellular.tsv --groups=../organisms_groups_filtered_cellular.tsv --stopwords=../all_global.tsv --local-stopwords=../all_local.tsv --out-matches=all_matches.tsv --out-segments=all_segments.tsv 
 
 cut -f 1,7 all_matches.tsv | egrep $'\t''-2$' | cut -f 1 | uniq > organism-mention-pmids.txt
 cut -f 1 database_documents.tsv > all-pmids.txt
