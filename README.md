@@ -17,9 +17,25 @@ The script will first gather the necessary files from the uniprot and NCBI FTPs,
 
 ## Corpus statistics
 
-## Error analysis of Jensenlab tagger
+There are three scripts in this directory to replicate the process of calculating corpus statistics as described in the Results and Discussion section of the manuscript. 
+Once again you only need to invoke the shell script in the directory.
+
+```shell
+./corpus_stats.sh
+```
+
+For word counting of the documents BERT basic tokenization is used, with the implementation found [here](https://github.com/spyysalo/bert-vocab-eval).
 
 ## Evaluation of Jensenlab tagger
+
+
+## Error analysis of Jensenlab tagger
+
+For the error analysis the evaluation script `evalso.py` is used to detect False Positives and False Negatives in each document of the test set. To invoke the command in the entire Jensenlab tagged corpus using the S1000 annotated corpus as a gold standard a shell script is provided.
+
+```shell
+./tagger_error_analysis.sh
+```
 
 ## Large scale tagging
 
