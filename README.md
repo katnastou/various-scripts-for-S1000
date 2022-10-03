@@ -65,13 +65,20 @@ To generate the plots for Figure 1 and Figure 2 in the manuscript one needs to e
 For Figure 1:
 
 ```shell
-python3 plot_prec_rec_progression.py --input_file=progression_precision_recall.tsv --task="Precision-Recall Plot for Progression" --output_file=progression_plot.pdf
+python3 plot_prec_rec_progression.py \
+        --input_file=progression_precision_recall.tsv \
+        --task="Precision-Recall Plot for Progression" \
+        --output_file=progression_plot.pdf
 ```
 
 For Figure 2:
 
 ```shell
-python3 plot_prec_rec_s1000.py --ml_method_file=Jouni-species-test-S1000-pr-rec-f1.tsv --jensenlab_method_file=Jensenlab-species-test-S1000-pr-rec-f1.tsv --task="Precision-Recall Plot for S1000" --output_file=S1000_plot.pdf
+python3 plot_prec_rec_s1000.py \
+        --ml_method_file=Jouni-species-test-S1000-pr-rec-f1.tsv \
+        --jensenlab_method_file=Jensenlab-species-test-S1000-pr-rec-f1.tsv \
+        --task="Precision-Recall Plot for S1000" \
+        --output_file=S1000_plot.pdf
 ```
 
 The figures generated from these commands are then further processed in Adobe Illustrator to place the legends properly and do some final polishing. 
