@@ -4,7 +4,7 @@
 ## get the corpus from here: https://jensenlab.org/resources/s1000/
 wget https://jensenlab.org/assets/s1000/S1000-corpus.tar.gz
 tar -xzcf S1000-corpus.tar.gz
-cd S1000-corpus-split
+cd S1000-corpus
 
 ### Calculate total mentions
 

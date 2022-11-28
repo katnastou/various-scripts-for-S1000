@@ -4,7 +4,7 @@ tar -xzvf S1000-corpus.tar.gz
 mkdir S1000-jensenlab-tagger/entire-corpus/test
 
 #copy all text from brat format
-cp S1000-corpus-split/entire-corpus/test/*.txt S1000-jensenlab-tagger/entire-corpus/test
+cp S1000-corpus/entire-corpus/test/*.txt S1000-jensenlab-tagger/entire-corpus/test
 
 
 #get all fields from latest version of database documents
@@ -13,16 +13,16 @@ for i in `ls -1 S1000-jensenlab-tagger/entire-corpus/test/*.txt`; do s="${i##*/}
  
 #remove last column for text, we want to add the text from BRAT standoff not the text currently in STRING
 # && remove second column of identifiers
-#get the database_documents file from here: https://jensenlab.org/resources/s1000/
-#wget
-#tar -xzvf
+#get the database_documents file from here
+wget https://a3s.fi/s1000/database_documents.tsv.gz
+gzip -dk database_documents.tsv.gz > database_documents.tsv
 awk -F"\t" 'NR==FNR{a[$0];next}$1 in a' s1000_test_pmids.list database_documents.tsv > database_docs_s1000_test.tsv
 awk -F"\t" '{printf("%s\t%s\t%s\t%s\n"),$1,$3,$4,$5}' database_docs_s1000_test.tsv > s1000_test_no_text.tsv
 #replace double new lines with tab
 
 #https://stackoverflow.com/a/3535826/8041304
 mkdir -p intermediate
-for i in S1000-corpus-split/entire-corpus/test/*.txt; do  perl -p -0 -w -e "s/\n\n/\n/g" $i | perl -p -0 -w -e "s/\n/\t/g" > intermediate/${i##*/}; done
+for i in S1000-corpus/entire-corpus/test/*.txt; do  perl -p -0 -w -e "s/\n\n/\n/g" $i | perl -p -0 -w -e "s/\n/\t/g" > intermediate/${i##*/}; done
 
 #create file with PMIDs and text 
 for i in intermediate/*.txt ; do text=`cat $i`; i=${i##*/};echo -e "${i%.txt}\t$text";done > s1000_test_brat_standoff_pmid_text.tsv
@@ -33,10 +33,19 @@ awk -F"\t" 'NR==FNR{a[$1]=$0;next}$1 in a{printf("PMID:%s\t%s\n"),$0,a[$1]}' s10
 
 
 #run tagger with correct dictionary files
+
+# get the tagger from here: https://github.com/larsjuhljensen/tagger
+# you need to set up tagger first in case you haven't already
+# uncomment the next lines to do so
+# git clone https://github.com/larsjuhljensen/tagger tagger
+# cd tagger
+# make
+# cd ..
+
+
 # get the dictionary files for tagger from here: https://jensenlab.org/resources/s1000/
-# and the tagger from here: https://github.com/larsjuhljensen/tagger
-#wget 
-#tar -xzvf
+wget https://zenodo.org/api/files/b8a0e221-3cc3-4db5-a2e9-f19a1bd2e5cb/tagger-organisms-dictionary-S1000.tar.gz?versionId=12618791-8e62-4d59-bf35-b54a30d4a5f7
+tar -xzvf tagger-organisms-dictionary-S1000.tar.gz
 cat s1000_test_brat_text.tsv | tagcorpus --threads=1 --types=organisms_types.tsv --entities=organisms_entities_filtered_cellular.tsv --names=organisms_names_filtered_cellular.tsv --groups=organisms_groups_filtered_cellular.tsv --stopwords=all_global.tsv --local-stopwords=all_local.tsv --out-matches=s1000_test_matches.tsv --out-segments=s1000_test_segments.tsv 
 
 #cat s1000_test_brat_text.tsv | /home/projects/ku_10024/apps/tagger-jan2021/tagcorpus --threads=10 --types=../organisms_types.tsv --entities=../organisms_entities_filtered_cellular.tsv --names=../organisms_names_filtered_cellular.tsv --groups=../organisms_groups_filtered_cellular.tsv --stopwords=../all_global.tsv --local-stopwords=../all_local.tsv --out-matches=s1000_test_matches.tsv --out-segments=s1000_test_segments.tsv 
@@ -81,7 +90,7 @@ for f in S1000-jensenlab-tagger/entire-corpus/test/*.ann; do egrep '^T[0-9]+'$'\
 #Do the text alignment
 cp -r S1000-jensenlab-tagger/entire-corpus/test-filtered{,-aligned}
 
-for f in S1000-jensenlab-tagger/entire-corpus/test-filtered/*.ann; do python3 annalign.py $f ${f%.ann}.txt S1000-corpus-split/entire-corpus/test/$(basename $f .ann).txt > S1000-jensenlab-tagger/entire-corpus/test-filtered-aligned/$(basename $f); done
+for f in S1000-jensenlab-tagger/entire-corpus/test-filtered/*.ann; do python3 annalign.py $f ${f%.ann}.txt S1000-corpus/entire-corpus/test/$(basename $f .ann).txt > S1000-jensenlab-tagger/entire-corpus/test-filtered-aligned/$(basename $f); done
 
 #run the evaluation script -- python2
-python ./evalso.py S1000-corpus-split/entire-corpus/test S1000-jensenlab-tagger/entire-corpus/test-filtered-aligned --filtertypes Class,Family,Kingdom,Order,Out-of-scope,Phylum,Genus,Strain --overlap
+python ./evalso.py S1000-corpus/entire-corpus/test S1000-jensenlab-tagger/entire-corpus/test-filtered-aligned --filtertypes Class,Family,Kingdom,Order,Out-of-scope,Phylum,Genus,Strain --overlap
